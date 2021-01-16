@@ -9,3 +9,7 @@ serverSide/.webassets-cache
 serverSide/__pycache__/
 serverSide/*.py[cod]
 serverSide/*$py.class
+
+# Cassandra connection
+serverSide/secure-connect-exercisewithfriends.zip
+serverSide/connect_database.py
