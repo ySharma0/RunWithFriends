@@ -1,7 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods = ["POST"])
 def index():
-    return ("hi yash")
+    return "index"
