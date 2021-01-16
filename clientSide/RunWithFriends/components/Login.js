@@ -5,7 +5,7 @@ function Login( { navigation }) {
     return (
         <View>
             <Text>Hello from Login!</Text>
-            <Button title='Go To SignUp' onPress={() => navigation.navigate("SignUp")}></Button>
+            <Button title= 'Go To Sign Up' onPress={() => navigation.navigate("SignUp")}></Button>
         </View>
     );
 }
