@@ -115,3 +115,17 @@ def getfriends():
     userid = uuid.UUID(getfriends_params["userid"])
     friends = session.execute(session.prepare("""SELECT friend_list FROM "Exercisewithfriends".user_info WHERE id = ?"""),[userid]).one()[0]
     return json.dumps({"friends":list(friends)}),200
+
+
+@app.route("/getuserinfo", methods = ["POST"])
+def getuserinfo():
+    getuserinfo_params = request.get_json()
+    userid = uuid.UUID(getuserinfo_params["userid"])
+    userinfo = session.execute(session.prepare("""SELECT * FROM "Exercisewithfriends".user_info WHERE id = ?"""),[userid]).one()
+    return jsonify({"user_id":userinfo[0],
+                    "age":userinfo[1],
+                    "country":userinfo[2],
+                    "email":userinfo[3],
+                    "first_name":userinfo[4],
+                    "gender":userinfo[6],
+                    "last_name":userinfo[7]})
