@@ -42,20 +42,20 @@ app = Flask(__name__)
 def index():
     return "index"
 # LOGIN API
-# @app.route("/login", methods =["POST"])
-# def login():
-#     login_params = request.get_json()
-#     usrname = str(login_params["username"]).upper()
-#     pswd = str(login_params["password"])
-#     passwordHash = hashlib.sha256()
-#     passwordHash.update(pswd.encode('utf8'))
-#     hashedPassword = str(passwordHash.hexdigest())
+@app.route("/login", methods =["POST"])
+def login():
+    login_params = request.get_json()
+    usrname = str(login_params["username"]).upper()
+    pswd = str(login_params["password"])
+    passwordHash = hashlib.sha256()
+    passwordHash.update(pswd.encode('utf8'))
+    hashedPassword = str(passwordHash.hexdigest())
 
-#     if session.execute(session.prepare( """ select count(*) from "Exercisewithfriends".user WHERE username=? and password=? ALLOW FILTERING; """), [usrname, hashedPassword]).one()[0] == 1:
-#         userID = session.execute(session.prepare( """ select userinfo_id from "Exercisewithfriends".user WHERE username=?; """), [usrname]).one()[0]
-#         return jsonify({"userinfo_id":userID}),200
-#     else:
-#         return jsonify({"error":"unsuccesful"}),200
+    if session.execute(session.prepare( """ select count(*) from "Exercisewithfriends".user WHERE username=? and password=? ALLOW FILTERING; """), [usrname, hashedPassword]).one()[0] == 1:
+        userID = session.execute(session.prepare( """ select userinfo_id from "Exercisewithfriends".user WHERE username=?; """), [usrname]).one()[0]
+        return jsonify({"userinfo_id":userID}),200
+    else:
+        return jsonify({"error":"unsuccesful"}),200
         
 @app.route("/signup", methods = ["POST"])
 def signup():
@@ -129,3 +129,16 @@ def getuserinfo():
                     "first_name":userinfo[4],
                     "gender":userinfo[6],
                     "last_name":userinfo[7]})
+
+@app.route("/updateuserinfo", methods = ["POST"])
+def updateuserinfo():
+    updateuserinfo_params = request.get_json()
+    userid = uuid.UUID(updateuserinfo_params["userid"])
+    firstName = updateuserinfo_params["first_name"]
+    lastName = updateuserinfo_params["last_name"]
+    email = updateuserinfo_params["email"]
+    age = updateuserinfo_params["age"]
+    gender = updateuserinfo_params["gender"]
+    country = updateuserinfo_params["country"]
+    session.execute(session.prepare("""UPDATE "Exercisewithfriends".user_info SET first_name=?, last_name=?, email=?,age=?,gender=?,country=? WHERE id = ?"""),[firstName,lastName,email,age,gender,country,userid])
+    return jsonify({"success":"updated"})
