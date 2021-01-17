@@ -183,8 +183,11 @@ def createchallenge():
         return jsonify({"success": "challenge created"}), 200
 
 
-@app.route("/joinchallenge", methods=["POST"])
+@app.route("/joinchallenge", methods=["POST", "GET"])
 def joinchallenge():
+    if(request.method == "GET"):
+        return render_template("joinchallenge.html")
+
     join_params = request.get_json()
     userid = uuid.UUID(join_params["userid"])
     username = session.execute(session.prepare(
