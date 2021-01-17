@@ -145,12 +145,12 @@ def updateuserinfo():
 
 @app.route("/createchallenge", methods = ["POST"])
 def createchallenge():
-    signup_params = request.get_json()
-    userid = uuid.UUID(signup_params["userid"])
+    create_params = request.get_json()
+    userid = uuid.UUID(create_params["userid"])
     owner = session.execute(session.prepare("""SELECT username FROM "Exercisewithfriends".user WHERE userinfo_id = ? ALLOW FILTERING"""),[userid]).one()[0]
-    join_code = str(signup_params["join_code"])
+    join_code = str(create_params["join_code"])
     isOngoing = True
-    workout = signup_params["workout"]
+    workout = create_params["workout"]
     scores = {owner: 0}
 
     if( session.execute(session.prepare("""SELECT count(*) FROM "Exercisewithfriends".challenge WHERE join_code = ?"""),[join_code]).one()[0]):
