@@ -3,6 +3,7 @@ from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 import os
 import hashlib
+import uuid
 
 cloud_config= {
         'secure_connect_bundle': 'secure-connect-exercisewithfriends.zip'
@@ -85,22 +86,24 @@ def signup():
 @app.route("/addfriend", methods = ["POST"])
 def addfriend():
     addfriend_params = request.get_json()
-    username = addfriend_params["userid"]
+    userid = uuid.UUID(addfriend_params["userid"])
     friend = str(addfriend_params["friend"]).upper()
     if(checkUser(friend) == False):
         return jsonify({"error":"user does not exist"})
     else:
-        removefriendQuerry = """update 'Exercisewithfriends'.user_info set friends_list = friends_list + {?} where id= ? ;"""
-        session.execute(session.prepare(addFriendQuery),[friend,userId])
+        addfriendQuerry = """update "Exercisewithfriends".user_info set friend_list = friend_list + {'""" + friend + """'} where id= ? ;"""
+        session.execute(session.prepare(addfriendQuerry),[userid])
         return({"success":"Added friend"}), 200
+
+
 @app.route("/removefriend", methods = ["POST"])
 def removefriend():
     removefriend_params = request.get_json()
-    username = removefriend_params["userid"]
+    userid = uuid.UUID(removefriend_params["userid"])
     friend = str(removefriend_params["friend"]).upper()
     if(checkUser(friend) == False):
         return jsonify({"error":"user does not exist"})
     else:
-        removefriendQuerry = """update 'Exercisewithfriends'.user_info set friends_list = friends_list - {?} where id= ? ;"""
-        session.execute(session.prepare(addFriendQuery),[friend,userId])
-        return({"success":"Removed friend"}), 200
+        removefriendQuerry = """update "Exercisewithfriends".user_info set friend_list = friend_list + {'""" + friend + """'} where id= ? ;"""
+        session.execute(session.prepare(removefriendQuerry),[userid])
+        return({"success":"removed friend"}), 200
