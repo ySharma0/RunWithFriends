@@ -172,7 +172,7 @@ def joinchallenge():
         return "error, join code does not exist"
     else:
         session.execute(session.prepare("""UPDATE "Exercisewithfriends".challenge SET scores = scores + {'""" + username + """': 0} WHERE join_code = ?"""), [join_code])
-        return jsonify({"success":"challenge created"}),200
+        return jsonify({"success":"challenge joined"}),200
 
 # @app.route("/getAllchallenge", methods = ["POST"])
 # def joinchallenge():
