@@ -186,18 +186,25 @@ def getAllchallenge():
     return json.dumps(x)
     
 
-# @app.route("/getChallengeInfo", methods = ["POST"])
-# def getChallengeInfo():
-#     join_params = request.get_json()
-#     join_code = str(join_params["join_code"])
+@app.route("/getChallengeInfo", methods = ["POST"])
+def getChallengeInfo():
+    join_params = request.get_json()
+    join_code = str(join_params["join_code"])
     
-#     challenge_info = session.execute(session.prepare("""SELECT * FROM "Exercisewithfriends".challenge WHERE join_code = ?"""),[join_code]).one()
-#     y = ["join_code", "isongoing", "name", "owner", "scores", "workout"]
-#     x = {}
-#     for i in range(len(challenge_info)-2):
-#         x[y[i]] = challenge_info[i]
-#     for i in range(len(challenge_info[4])):
+    challenge_info = session.execute(session.prepare("""SELECT * FROM "Exercisewithfriends".challenge WHERE join_code = ?"""),[join_code]).one()
+    y = ["join_code", "isongoing", "name", "owner"]
+    x = {}
+    for i in range(len(challenge_info)-2):
+        x[y[i]] = challenge_info[i]
+    y = list(challenge_info[4].keys())
+    y2 = list(challenge_info[4].values())
+    x["scores"] = {}
+    x["workout"]={}
+    for i in range(len(y)):
+        x["scores"][y[i]] = y2[i]
+    y = list(challenge_info[5].keys())
+    y2 = list(challenge_info[5].values())
+    for i in range(len(y)):
+        x["workout"][y[i]] = y2[i]
         
-#     x[y[4]] = 
-#     x[y[5]]
-#     return jsonify(x)
+    return jsonify(x)
