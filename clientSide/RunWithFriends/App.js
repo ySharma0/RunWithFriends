@@ -1,12 +1,18 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import SignedOutStack from './components/router';
-// import { NavigationContainer } from '@react-navigation/native';
+import MainStack, { TabStack } from './components/router';
+import './components/global';
 
 export default function App() {
   return (
     <NavigationContainer>
-      <SignedOutStack />
+      { loggedIn ? (
+        <MainStack />
+      ) : (
+        <TabStack />
+      )
+    }
     </NavigationContainer>
   );
 }
+
