@@ -29,8 +29,7 @@ app = Flask(__name__)
 
 #Check if user exists method:
 def checkUser(username):
-    checkIfUserExistsQuery = "SELECT username FROM 'Exercisewithfriends'.user"
-    if(session.execute(checkIfUserExistsQuery) != None):
+    if(session.execute(session.prepare( """SELECT username FROM "Exercisewithfriends".user WHERE username = ?"""),[username]).one() != None):
         return True
     else:
         return False
@@ -72,7 +71,7 @@ def signup():
     hashedPassword = str(passwordHash.hexdigest())
     placeholderFriendslist = set()
 
-    if( checkUser == True):
+    if( checkUser(username) == True):
         return "error, username already exists"
     else:
         
@@ -86,7 +85,7 @@ def signup():
 @app.route("/addfriend", methods = ["POST"])
 def addfriend():
     addfriend_params = request.get_json()
-    username = addfriend_params["userid"])
+    username = addfriend_params["userid"]
     friend = str(addfriend_params["friend"]).upper()
     if(checkUser(friend) == False):
         return jsonify({"error":"user does not exist"})
@@ -97,7 +96,7 @@ def addfriend():
 @app.route("/removefriend", methods = ["POST"])
 def removefriend():
     removefriend_params = request.get_json()
-    username = removefriend_params["userid"])
+    username = removefriend_params["userid"]
     friend = str(removefriend_params["friend"]).upper()
     if(checkUser(friend) == False):
         return jsonify({"error":"user does not exist"})
