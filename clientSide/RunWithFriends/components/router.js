@@ -8,6 +8,7 @@ import Dashboard from './Dashboard';
 import Profile from './Profile';
 import { NavigationContainer } from '@react-navigation/native';
 import FindFriends from './FindFriends';
+import Leaderboards from './Leaderboards';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,8 @@ export default function MainStack() {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} /> 
             <Stack.Screen name="Dashboard" component={Dashboard} />
+            <Stack.Screen name="Leaderboards" component={Leaderboards} />
+
         </Stack.Navigator>
     );
 }
