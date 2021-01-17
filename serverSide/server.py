@@ -142,3 +142,20 @@ def updateuserinfo():
     country = updateuserinfo_params["country"]
     session.execute(session.prepare("""UPDATE "Exercisewithfriends".user_info SET first_name=?, last_name=?, email=?,age=?,gender=?,country=? WHERE id = ?"""),[firstName,lastName,email,age,gender,country,userid])
     return jsonify({"success":"updated"})
+
+@app.route("/createchallenge", methods = ["POST"])
+def createchallenge():
+    signup_params = request.get_json()
+    userid = uuid.UUID(signup_params["userid"])
+    owner = session.execute(session.prepare("""SELECT username FROM "Exercisewithfriends".user WHERE userinfo_id = ? ALLOW FILTERING"""),[userid]).one()[0]
+    join_code = str(signup_params["join_code"])
+    isOngoing = True
+    workout = signup_params["workout"]
+    scores = {owner: 0}
+
+    if( session.execute(session.prepare("""SELECT count(*) FROM "Exercisewithfriends".challenge WHERE join_code = ?"""),[join_code]).one()[0]):
+        return "error, join code already exists"
+    else:
+        qparams = [join_code, isOngoing, owner, workout, scores]
+        session.execute(session.prepare("""INSERT INTO "Exercisewithfriends".challenge ( join_code, isOngoing , owner , workout, scores) VALUES (?,?,?, ?, ?);"""),qparams)
+        return jsonify({"success":"challenge created"}),200
