@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 // import { TextInput } from 'react-native-gesture-handler';
 import AppButton from './AppButton';
 
-const SignUp = ({ navigation }) => {
+function SignUp({ navigation }) {
   return (
     <View style={styles.container}>
         <View style={styles.inputView}>
@@ -40,7 +40,7 @@ const SignUp = ({ navigation }) => {
 
     </View>
   );
-}
+};
 
 
 const styles = StyleSheet.create({
