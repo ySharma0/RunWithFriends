@@ -86,23 +86,22 @@ def signup():
 @app.route("/addfriend", methods = ["POST"])
 def addfriend():
     addfriend_params = request.get_json()
-    username = str(addfriend_params["username"]).upper()
+    username = addfriend_params["userid"])
     friend = str(addfriend_params["friend"]).upper()
-    if(checkUser(username) == False):
+    if(checkUser(friend) == False):
         return jsonify({"error":"user does not exist"})
     else:
-        userId = None
-        getFriendsListQuery = "SELECT friends_list FROM 'Exercisewithfriends'.user_info WHERE user_id=" + userId
-        getUserIdQuery = "SELECT userinfo_id FROM 'Exercisewithfriends'.user WHERE username="+username
-        addFriendQuery = """UPDATE friends_list FROM 'Exercisewithfriends'.user_info SET friends_list = [?] + friends_list WHERE userId = ?"""
-        # Get userId from username:
-        userId = session.execute(getUserIdQuery).one()
-        # check if users are already friends:
-        friends = session.execute(getFriendsListQuery).one()
-        if friends != None:
-            if friend in friends:
-                return jsonify({"error":"friend already added"})
-        else:
-            # Add friend to list:
-            session.execute(session.prepare(addFriendQuery),[friend,userId])
-            return({"success":"Added friend"}),200
+        removefriendQuerry = """update 'Exercisewithfriends'.user_info set friends_list = friends_list + {?} where id= ? ;"""
+        session.execute(session.prepare(addFriendQuery),[friend,userId])
+        return({"success":"Added friend"}), 200
+@app.route("/removefriend", methods = ["POST"])
+def removefriend():
+    removefriend_params = request.get_json()
+    username = removefriend_params["userid"])
+    friend = str(removefriend_params["friend"]).upper()
+    if(checkUser(friend) == False):
+        return jsonify({"error":"user does not exist"})
+    else:
+        removefriendQuerry = """update 'Exercisewithfriends'.user_info set friends_list = friends_list - {?} where id= ? ;"""
+        session.execute(session.prepare(addFriendQuery),[friend,userId])
+        return({"success":"Removed friend"}), 200
