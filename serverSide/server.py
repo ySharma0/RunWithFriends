@@ -4,6 +4,7 @@ from cassandra.auth import PlainTextAuthProvider
 import os
 import hashlib
 import uuid
+import json
 
 cloud_config= {
         'secure_connect_bundle': 'secure-connect-exercisewithfriends.zip'
@@ -107,3 +108,10 @@ def removefriend():
         removefriendQuerry = """update "Exercisewithfriends".user_info set friend_list = friend_list + {'""" + friend + """'} where id= ? ;"""
         session.execute(session.prepare(removefriendQuerry),[userid])
         return({"success":"removed friend"}), 200
+
+@app.route("/getfriends", methods = ["POST"])
+def getfriends():
+    getfriends_params = request.get_json()
+    userid = uuid.UUID(getfriends_params["userid"])
+    friends = session.execute(session.prepare("""SELECT friend_list FROM "Exercisewithfriends".user_info WHERE id = ?"""),[userid]).one()[0]
+    return json.dumps({"friends":list(friends)}),200
