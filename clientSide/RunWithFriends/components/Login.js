@@ -45,12 +45,12 @@ function Login({ navigation }) {
 const styles = StyleSheet.create({
     container:{
         flex: 1, 
-        backgroundColor: 'white',
+        backgroundColor: '#2B60DE',
         alignItems: 'center',
         justifyContent: 'center',
     },
     inputView: {
-        backgroundColor: "gold",
+        backgroundColor: "white",
         borderRadius: 30,
         width: "70%",
         height: 45,
