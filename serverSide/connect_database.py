@@ -1,1 +1,16 @@
-"https://astra.datastax.com/org/6462f8d0-75be-422b-a85e-30b09aef1cd5/database/d30416e2-0b84-4356-901d-722c6f1028bd/connect"
+
+from cassandra.cluster import Cluster
+from cassandra.auth import PlainTextAuthProvider
+
+cloud_config= {
+        'secure_connect_bundle': '<<secure-connect-Exercisewithfriends.zip'
+}
+auth_provider = PlainTextAuthProvider('<username>', '<password>')
+cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
+session = cluster.connect()
+
+row = session.execute("select release_version from system.local").one()
+if row:
+    print(row[0])
+else:
+    print("An error occurred.")

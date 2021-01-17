@@ -1,0 +1,15 @@
+# Virtual Enviroment
+serverSide/env/
+
+# Flask
+serverSide/instance/*
+!serverSide/instance/.gitignore
+serverSide/.webassets-cache
+#Flask.Python Stack
+serverSide/__pycache__/
+serverSide/*.py[cod]
+serverSide/*$py.class
+
+# Cassandra connection
+serverSide/secure-connect-exercisewithfriends.zip
+serverSide/connect_database.py
