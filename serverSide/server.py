@@ -41,20 +41,20 @@ app = Flask(__name__)
 def index():
     return "index"
 # LOGIN API
-@app.route("/login", methods =["POST"])
-def login():
-    login_params = request.get_json()
-    usrname = str(login_params["username"]).upper()
-    pswd = str(login_params["password"])
-    passwordHash = hashlib.sha256()
-    passwordHash.update(pswd.encode('utf8'))
-    hashedPassword = str(passwordHash.hexdigest())
+# @app.route("/login", methods =["POST"])
+# def login():
+#     login_params = request.get_json()
+#     usrname = str(login_params["username"]).upper()
+#     pswd = str(login_params["password"])
+#     passwordHash = hashlib.sha256()
+#     passwordHash.update(pswd.encode('utf8'))
+#     hashedPassword = str(passwordHash.hexdigest())
 
-    if session.execute(session.prepare( """ select count(*) from "Exercisewithfriends".user WHERE username=? and password=? ALLOW FILTERING; """), [usrname, hashedPassword]).one()[0] == 1:
-        userID = session.execute(session.prepare( """ select userinfo_id from "Exercisewithfriends".user WHERE username=?; """), [usrname]).one()[0]
-        return jsonify({"userinfo_id":userID}),200
-    else:
-        return jsonify({"error":"unsuccesful"}),200
+#     if session.execute(session.prepare( """ select count(*) from "Exercisewithfriends".user WHERE username=? and password=? ALLOW FILTERING; """), [usrname, hashedPassword]).one()[0] == 1:
+#         userID = session.execute(session.prepare( """ select userinfo_id from "Exercisewithfriends".user WHERE username=?; """), [usrname]).one()[0]
+#         return jsonify({"userinfo_id":userID}),200
+#     else:
+#         return jsonify({"error":"unsuccesful"}),200
         
 @app.route("/signup", methods = ["POST"])
 def signup():
@@ -67,32 +67,42 @@ def signup():
     age = int(signup_params["age"])
     gender = str(signup_params["gender"]).upper()
     country = str(signup_params["country"]).upper()
+    passwordHash = hashlib.sha256()
+    passwordHash.update(password.encode('utf8'))
+    hashedPassword = str(passwordHash.hexdigest())
+    placeholderFriendslist = set()
 
     if( checkUser == True):
         return "error, username already exists"
     else:
-        session.execute(session.prepare("""INSERT INTO "Exercisewithfriends".user (username,password) VALUES(?,?)"""),[username, hashedPassword])
+        
+        session.execute(session.prepare("""INSERT INTO "Exercisewithfriends".user (username,password,userinfo_id) VALUES(?,?,uuid())"""),[username, hashedPassword])
+        # Get id of just created user:
+        userID = session.execute(session.prepare( """ select userinfo_id from "Exercisewithfriends".user WHERE username=?; """), [username]).one()[0]
+        # update user info:
+        session.execute(session.prepare("""insert into "Exercisewithfriends".user_info (id, age, country, email, first_name, friend_list, gender, last_name) values (?,?,?,?,?,?,?,?)"""),[userID,age,country,email,firstName,placeholderFriendslist,gender,lastName])
+        return jsonify({"sucess":"user created"}),200
 
-# @app.route("/addfriend", methods = ["POST"])
-# def addfriend():
-#     addfriend_params = request.get_json()
-#     username = str(addfriend_params["username"]).upper()
-#     friend = str(addfriend_params["friend"]).upper()
-#     if(checkUser(username) == False):
-#         return jsonify({"error":"user does not exist"})
-#     else:
-#         userId = None
-#         getFriendsListQuery = "SELECT friends_list FROM 'Exercisewithfriends'.user_info WHERE user_id=" + userId
-#         getUserIdQuery = "SELECT userinfo_id FROM 'Exercisewithfriends'.user WHERE username="+username
-#         addFriendQuery = """UPDATE friends_list FROM 'Exercisewithfriends'.user_info SET friends_list = [?] + friends_list WHERE userId = ?"""
-#         # Get userId from username:
-#         userId = session.execute(getUserIdQuery).one()
-#         # check if users are already friends:
-#         friends = session.execute(getFriendsListQuery).one()
-#         if friends != None:
-#             if friend in friends:
-#                 return jsonify({"error":"friend already added"})
-#         else:
-#             # Add friend to list:
-#             session.execute(session.prepare(addFriendQuery),[friend,userId])
-#             return({"success":"Added friend"}),200
+@app.route("/addfriend", methods = ["POST"])
+def addfriend():
+    addfriend_params = request.get_json()
+    username = str(addfriend_params["username"]).upper()
+    friend = str(addfriend_params["friend"]).upper()
+    if(checkUser(username) == False):
+        return jsonify({"error":"user does not exist"})
+    else:
+        userId = None
+        getFriendsListQuery = "SELECT friends_list FROM 'Exercisewithfriends'.user_info WHERE user_id=" + userId
+        getUserIdQuery = "SELECT userinfo_id FROM 'Exercisewithfriends'.user WHERE username="+username
+        addFriendQuery = """UPDATE friends_list FROM 'Exercisewithfriends'.user_info SET friends_list = [?] + friends_list WHERE userId = ?"""
+        # Get userId from username:
+        userId = session.execute(getUserIdQuery).one()
+        # check if users are already friends:
+        friends = session.execute(getFriendsListQuery).one()
+        if friends != None:
+            if friend in friends:
+                return jsonify({"error":"friend already added"})
+        else:
+            # Add friend to list:
+            session.execute(session.prepare(addFriendQuery),[friend,userId])
+            return({"success":"Added friend"}),200
