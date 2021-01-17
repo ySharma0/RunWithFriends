@@ -151,13 +151,14 @@ def createchallenge():
     join_code = str(create_params["join_code"])
     isOngoing = True
     workout = create_params["workout"]
+    name = str(create_params["name"])
     scores = {owner: 0}
 
     if( session.execute(session.prepare("""SELECT count(*) FROM "Exercisewithfriends".challenge WHERE join_code = ?"""),[join_code]).one()[0]):
         return "error, join code already exists"
     else:
-        qparams = [join_code, isOngoing, owner, workout, scores]
-        session.execute(session.prepare("""INSERT INTO "Exercisewithfriends".challenge ( join_code, isOngoing , owner , workout, scores) VALUES (?,?,?, ?, ?);"""),qparams)
+        qparams = [name,join_code, isOngoing, owner, workout, scores]
+        session.execute(session.prepare("""INSERT INTO "Exercisewithfriends".challenge ( name,join_code, isOngoing , owner , workout, scores) VALUES (?,?,?,?, ?, ?);"""),qparams)
         return jsonify({"success":"challenge created"}),200
 
 @app.route("/joinchallenge", methods = ["POST"])
@@ -172,3 +173,29 @@ def joinchallenge():
     else:
         session.execute(session.prepare("""UPDATE "Exercisewithfriends".challenge SET scores = scores + {'""" + username + """': 0} WHERE join_code = ?"""), [join_code])
         return jsonify({"success":"challenge created"}),200
+
+# @app.route("/getAllchallenge", methods = ["POST"])
+# def joinchallenge():
+#     join_params = request.get_json()
+#     userid = uuid.UUID(join_params["userid"])
+#     username = session.execute(session.prepare("""SELECT username FROM "Exercisewithfriends".user WHERE userinfo_id = ? ALLOW FILTERING"""),[userid]).one()[0]
+#     join_code = str(join_params["join_code"])
+    
+#     if(not session.execute(session.prepare("""SELECT count(*) FROM "Exercisewithfriends".challenge WHERE join_code = ?"""),[join_code]).one()[0]):
+#         return "error, join code does not exist"
+#     else:
+#         session.execute(session.prepare("""UPDATE "Exercisewithfriends".challenge SET scores = scores + {'""" + username + """': 0} WHERE join_code = ?"""), [join_code])
+#         return jsonify({"success":"challenge created"}),200
+
+# @app.route("/getChallengeInfo", methods = ["POST"])
+# def joinchallenge():
+#     join_params = request.get_json()
+#     userid = uuid.UUID(join_params["userid"])
+#     username = session.execute(session.prepare("""SELECT username FROM "Exercisewithfriends".user WHERE userinfo_id = ? ALLOW FILTERING"""),[userid]).one()[0]
+#     join_code = str(join_params["join_code"])
+    
+#     if(not session.execute(session.prepare("""SELECT count(*) FROM "Exercisewithfriends".challenge WHERE join_code = ?"""),[join_code]).one()[0]):
+#         return "error, join code does not exist"
+#     else:
+#         session.execute(session.prepare("""UPDATE "Exercisewithfriends".challenge SET scores = scores + {'""" + username + """': 0} WHERE join_code = ?"""), [join_code])
+#         return jsonify({"success":"challenge created"}),200
