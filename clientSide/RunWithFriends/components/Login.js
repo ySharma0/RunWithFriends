@@ -9,25 +9,32 @@ function Login({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.inputView}>
-        <TextInput style={styles.TextInput} 
-        placeholder='Email'
-        placeholderTextColor='gray'
+        <TextInput
+          style={styles.TextInput}
+          placeholder="Email"
+          placeholderTextColor="gray"
         />
       </View>
       <View style={styles.inputView}>
-        <TextInput style={styles.TextInput} 
-        placeholder='Password'
-        placeholderTextColor='gray'
-        secureTextEntry={true}
+        <TextInput
+          style={styles.TextInput}
+          placeholder="Password"
+          placeholderTextColor="gray"
+          secureTextEntry={true}
         />
       </View>
       <AppButton
         title="Log In!"
-        onPress={() => navigation.navigate("Log In")}
+        // Need to change the path to this one//
+        ///
+        onPress={() => navigation.navigate("Login")}
+        ///
+        //
+
         backgroundColor="#007bff"
       />
-        <AppButton
-        title="SIGN UP!"
+      <AppButton
+        title="Create Account"
         onPress={() => navigation.navigate("SignUp")}
         backgroundColor="#007bff"
       />
