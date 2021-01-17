@@ -61,8 +61,11 @@ def login():
         return jsonify({"error": "unsuccesful"}), 200
 
 
-@app.route("/signup", methods=["POST"])
+@app.route("/signup", methods=["POST", "GET"])
 def signup():
+    if(request.method == "GET"):
+        return render_template("signup.html")
+
     signup_params = request.get_json()
     username = str(signup_params["username"]).upper()
     password = str(signup_params["password"])

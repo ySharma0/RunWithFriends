@@ -9,6 +9,23 @@
         </title>
     </head>
     <body>
+        <div class="alert alert-primary" role="alert" id = "logoutAlert">
+            {{message}}
+          </div>
+        <h1 class = "display-1">Book Reviews</h1>
+        <div class = "container">
+            <div class = "row" id="signUpRow">
+                <div class = "col-sm">
+                    <div class = "display-4">Dont have an account? Sign-Up:</div>
+                    
+                    <form action = "{{url_for('signup')}}">
+                        <input type = "submit" value = "Sign-Up" class ="btn btn-primary"/>
+                    </form>
+                    
+                </div>
+             
+            </div>
+        </div>
     </body>
     <footer>
         <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1001freedownloads.s3.amazonaws.com%2Fvector%2Fthumb%2F93674%2F1309128948.png&f=1&nofb=1" alt = "books" id = "footerBooks">
