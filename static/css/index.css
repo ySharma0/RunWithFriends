@@ -1,49 +1,42 @@
-h1 {
-  text-align: center;
+img {
+  width: 150px;
+}
+div {
+  margin: auto;
+
+  width: 60%;
+  /* 
+  border: 5px solid #ffff00; */
+
+  padding: 10px;
 }
 
-#signUpRow .display-4 {
-  padding-bottom: 10px;
-}
-
-@media only screen and (max-width: 600px) {
-  #submit-btn {
-    display: block;
-    font-size: 30px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  #signUpRow .display-4 {
-    font-size: 20px;
-    text-align: center;
-    padding-bottom: 15px;
-  }
-  #signUpRow .btn.btn-primary {
-    display: block;
-    font-size: 20px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  #logInRow h3 {
-    padding-top: 30px;
-    text-align: center;
-  }
-}
-#footerBooks {
-  display: block;
-  padding-top: 100px;
-  width: 15%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#logoutAlert {
+img {
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 30%;
 }
+header {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
 
-/*# sourceMappingURL=index.css.map */
+main {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+h1 {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+p {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

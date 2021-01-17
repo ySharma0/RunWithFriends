@@ -66,22 +66,23 @@ def signup():
     if(request.method == "GET"):
         return render_template("signup.html")
 
-    signup_params = request.get_json()
-    username = str(signup_params["username"]).upper()
-    password = str(signup_params["password"])
-    firstName = str(signup_params["firstName"]).capitalize()
-    lastName = str(signup_params["lastName"]).capitalize()
-    email = str(signup_params["email"]).upper()
-    age = int(signup_params["age"])
-    gender = str(signup_params["gender"]).upper()
-    country = str(signup_params["country"]).upper()
+    # signup_params = request.form.get("username")
+    username = str(request.form.get("username")).upper()
+    password = str(request.form.get("password"))
+    firstName = str(request.form.get("firstname")).capitalize()
+    lastName = str(request.form.get("lastname")).capitalize()
+    email = str(request.form.get("email")).upper()
+    age = int(request.form.get("age"))
+    gender = str(request.form.get("gender")).upper()
+    country = str(request.form.get("country")).upper()
     passwordHash = hashlib.sha256()
     passwordHash.update(password.encode('utf8'))
     hashedPassword = str(passwordHash.hexdigest())
     placeholderFriendslist = set()
 
     if(checkUser(username) == True):
-        return jsonify({"error": "username already exists"})
+        # return jsonify({"error": "username already exists"})
+        return "user already exists"
     else:
 
         session.execute(session.prepare(
@@ -92,7 +93,8 @@ def signup():
         # update user info:
         session.execute(session.prepare("""insert into "Exercisewithfriends".user_info (id, age, country, email, first_name, friend_list, gender, last_name) values (?,?,?,?,?,?,?,?)"""), [
                         userID, age, country, email, firstName, placeholderFriendslist, gender, lastName])
-        return jsonify({"success": "user created"}), 200
+        # return jsonify({"success": "user created"}), 200
+        return "User created, log in to access dashboard"
 
 
 @app.route("/addfriend", methods=["POST", "GET"])
