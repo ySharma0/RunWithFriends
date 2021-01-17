@@ -95,8 +95,10 @@ def signup():
         return jsonify({"success": "user created"}), 200
 
 
-@app.route("/addfriend", methods=["POST"])
+@app.route("/addfriend", methods=["POST", "GET"])
 def addfriend():
+    if(request.method == "GET"):
+        return render_template("addfriend.html")
     addfriend_params = request.get_json()
     userid = uuid.UUID(addfriend_params["userid"])
     friend = str(addfriend_params["friend"]).upper()
@@ -109,8 +111,10 @@ def addfriend():
         return({"success": "Added friend"}), 200
 
 
-@app.route("/removefriend", methods=["POST"])
+@app.route("/removefriend", methods=["POST", "GET"])
 def removefriend():
+    if(request.method == "GET"):
+        return render_template("removefriend.html")
     removefriend_params = request.get_json()
     userid = uuid.UUID(removefriend_params["userid"])
     friend = str(removefriend_params["friend"]).upper()
