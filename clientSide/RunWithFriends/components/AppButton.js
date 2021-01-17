@@ -1,5 +1,11 @@
 import React from 'react';
-import {Button, StyleSheet, TouchableOpacity,  Text, View} from 'react-native';
+import {
+    Button, 
+    StyleSheet, 
+    TouchableOpacity,  
+    Text, 
+    View
+} from 'react-native';
 
 
 const AppButton = ({ onPress, title }) => {
@@ -18,12 +24,10 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    position: "absolute",
-    bottom: -500,
-    left:150,
+    marginBottom: 20,
   },
   appButtonText: {
-    fontSize: 18,
+    fontSize:15,
     color: "#fff",
     fontWeight: "bold",
     alignSelf: "center",
