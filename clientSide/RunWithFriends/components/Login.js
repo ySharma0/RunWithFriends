@@ -27,7 +27,7 @@ function Login({ navigation }) {
         title="Log In!"
         // Need to change the path to this one//
         ///
-        onPress={() => navigation.navigate("Login")}
+        onPress={() => navigation.navigate("Dashboard")}
         ///
         //
 
@@ -67,8 +67,4 @@ const styles = StyleSheet.create({
 
 });
 
-
-
-
 export default Login;
-
